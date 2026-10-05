@@ -8,6 +8,7 @@ export default function UserCard({ user }: { user: User }) {
       style={{
         border: "2px solid purple",
         borderRadius: "6px",
+        width: "250px",
       }}
     >
       <div
@@ -20,7 +21,12 @@ export default function UserCard({ user }: { user: User }) {
         <img
           src={user?.image}
           alt={user?.firstName}
-          style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+          style={{
+            width: "50px",
+            height: "50px",
+            borderRadius: "50%",
+            backgroundColor: "whitesmoke",
+          }}
         />
       </div>
       <div style={{ textAlign: "center", padding: "10px" }}>
