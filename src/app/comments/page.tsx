@@ -81,6 +81,38 @@ export default function Comments() {
     setCommentData((prev) => handleDeleteReply(prev, parentId));
   };
 
+  // EDIT REPLY
+
+  const handleEditReply = (
+    comments: CommentType[],
+    parentId: number,
+    payload: { message: string; date: string },
+  ): CommentType[] => {
+    return comments.map((comment) => {
+      if (comment.id === parentId) {
+        return {
+          ...comment,
+          ...payload,
+        };
+      }
+
+      return {
+        ...comment,
+        replies: handleEditReply(comment.replies, parentId, payload),
+      };
+    });
+  };
+
+  const onEditReply = (parentId: number, message: string) => {
+    // console.log(parentId, message);
+    const payload = {
+      message: message,
+      date: new Date().toLocaleDateString(),
+    };
+
+    setCommentData((prev) => handleEditReply(prev, parentId, payload));
+  };
+
   console.log(commentData);
 
   return (
@@ -103,6 +135,7 @@ export default function Comments() {
             comment={comment}
             onAddReply={onAddReply}
             onDeleteReply={onDeleteReply}
+            onEditReply={onEditReply}
           />
         );
       })}
