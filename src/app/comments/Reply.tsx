@@ -6,9 +6,11 @@ import { CommentType } from "./commentType";
 export default function Reply({
   comment,
   onAddReply,
+  onDeleteReply,
 }: {
   comment: CommentType;
   onAddReply: (id: number, message: string) => void;
+  onDeleteReply: (id: number) => void;
 }) {
   const [inputReply, setInputReply] = useState("");
   const [showReply, setShowReply] = useState(false);
@@ -26,6 +28,10 @@ export default function Reply({
     setShowReply(false);
   };
 
+  const handleDeleteReply = () => {
+    onDeleteReply(comment.id);
+  };
+
   return (
     <section>
       <div>
@@ -35,6 +41,9 @@ export default function Reply({
           style={{ marginLeft: "10px" }}
         >
           Reply
+        </button>
+        <button style={{ marginLeft: "10px" }} onClick={handleDeleteReply}>
+          Delete
         </button>
       </div>
       {showReply && (
@@ -51,7 +60,12 @@ export default function Reply({
       <div style={{ marginLeft: "10px", marginTop: "10px" }}>
         {comment?.replies.map((reply) => {
           return (
-            <Reply key={reply.id} comment={reply} onAddReply={onAddReply} />
+            <Reply
+              key={reply.id}
+              comment={reply}
+              onAddReply={onAddReply}
+              onDeleteReply={onDeleteReply}
+            />
           );
         })}
       </div>
