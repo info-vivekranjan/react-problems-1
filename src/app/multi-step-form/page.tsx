@@ -1,9 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { formFields } from "./formFields";
+
+type FormInput = {
+  name: string;
+  email: string;
+  dob: string;
+  password: string;
+};
 
 export default function MultiStepForm() {
-  const [formInput, setFormInput] = useState({
+  const [formInput, setFormInput] = useState<FormInput>({
     name: "",
     email: "",
     dob: "",
@@ -12,12 +20,12 @@ export default function MultiStepForm() {
   const [step, setStep] = useState(1);
   const [error, setError] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [formData, setFormData] = useState<{
-    name: string;
-    email: string;
-    dob: string;
-    password: string;
-  }>({ name: "", email: "", dob: "", password: "" });
+  const [formData, setFormData] = useState<FormInput>({
+    name: "",
+    email: "",
+    dob: "",
+    password: "",
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -74,72 +82,34 @@ export default function MultiStepForm() {
 
       {!isSubmitted && (
         <form onSubmit={handleSubmit}>
-          {step === 1 && (
-            <div>
-              <label htmlFor="name">
-                <h1>Enter Name</h1>
-              </label>
-              <input
-                placeholder="John Marry"
-                type="text"
-                name="name"
-                id="name"
-                value={formInput.name}
-                onChange={handleChange}
-                style={{ padding: "10px", width: "300px", fontSize: "18px" }}
-              />
-            </div>
-          )}
-          {step === 2 && (
-            <div>
-              <label htmlFor="email">
-                <h1>Enter Email</h1>
-              </label>
-              <input
-                placeholder="jhon.marry@example.com"
-                type="email"
-                name="email"
-                id="email"
-                value={formInput.email}
-                onChange={handleChange}
-                style={{ padding: "10px", width: "300px", fontSize: "18px" }}
-              />
-            </div>
-          )}
-          {step === 3 && (
-            <div>
-              <label htmlFor="dob">
-                <h1>Enter DOB</h1>
-              </label>
-              <input
-                type="date"
-                name="dob"
-                id="dob"
-                value={formInput.dob}
-                onChange={handleChange}
-                style={{ padding: "10px", width: "300px", fontSize: "18px" }}
-              />
-            </div>
-          )}
-          {step === 4 && (
-            <div>
-              <label htmlFor="password">
-                <h1>Enter Password</h1>
-              </label>
-              <input
-                placeholder="Jhon@1234"
-                type="password"
-                name="password"
-                id="password"
-                value={formInput.password}
-                onChange={handleChange}
-                style={{ padding: "10px", width: "300px", fontSize: "18px" }}
-              />
-            </div>
-          )}
-
+          {formFields.map((field) => {
+            return (
+              <div key={field.id}>
+                {step === field.step && (
+                  <div>
+                    <label htmlFor={field.id}>
+                      <h1>Enter Name</h1>
+                    </label>
+                    <input
+                      placeholder={field.placeholder}
+                      type={field.type}
+                      name={field.name}
+                      id={field.id}
+                      value={formInput[field.name as keyof FormInput]}
+                      onChange={handleChange}
+                      style={{
+                        padding: "10px",
+                        width: "300px",
+                        fontSize: "18px",
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            );
+          })}
           <div style={{ marginTop: "20px" }}>
-            <button type="button" onClick={handleBack}>
+            <button type="button" onClick={handleBack} disabled={step === 1}>
               Back
             </button>
             {step < 4 ? (

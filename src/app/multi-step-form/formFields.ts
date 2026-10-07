@@ -1,0 +1,38 @@
+export const formFields = [
+  {
+    id: "name",
+    name: "name",
+    type: "text",
+    placeholder: "Jhon Marry",
+    label: "Enter Name",
+    step: 1,
+    errorMessage: "Name is required",
+  },
+  {
+    id: "email",
+    name: "email",
+    type: "email",
+    placeholder: "jhon.marry@example.com",
+    label: "Enter Email",
+    step: 2,
+    errorMessage: "Email is required",
+  },
+  {
+    id: "dob",
+    name: "dob",
+    type: "date",
+    placeholder: "",
+    label: "Enter DOB",
+    step: 3,
+    errorMessage: "DOB is required",
+  },
+  {
+    id: "password",
+    name: "password",
+    type: "password",
+    placeholder: "Jhon@1234",
+    label: "Enter Password",
+    step: 4,
+    errorMessage: "Password is required",
+  },
+];
