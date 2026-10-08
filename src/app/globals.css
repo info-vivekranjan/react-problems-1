@@ -1,2 +1,6 @@
 /* @import "tailwindcss"; */
 
+.dark button{
+    background-color: black;
+    color: white;
+}
