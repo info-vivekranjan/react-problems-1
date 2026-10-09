@@ -1,26 +1,13 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { KanbanDataType, STATUA_TYPES, TASK_DIRECTION } from "./kanbanType";
+import {
+  KanbanDataType,
+  STATUA_TYPES,
+  TASK_DIRECTION,
+  taskColumn,
+} from "./kanbanType";
 import TaskComp from "./TaskComp";
-
-const taskColumn = [
-  {
-    label: "Todo",
-    statusType: STATUA_TYPES.TODO,
-    color: "red",
-  },
-  {
-    label: "In Progress",
-    statusType: STATUA_TYPES.IN_PROGRESS,
-    color: "blue",
-  },
-  {
-    label: "Done",
-    statusType: STATUA_TYPES.DONE,
-    color: "green",
-  },
-];
 
 export default function KanbanBoard() {
   const [formInput, setFormInput] = useState({
