@@ -113,6 +113,14 @@ export default function KanbanBoard() {
     });
   }, []);
 
+  const handleEditTask = useCallback((id: number, title: string) => {
+    setTask((prev) => {
+      return prev.map((item) => {
+        return item.id === id ? { ...item, title } : item;
+      });
+    });
+  }, []);
+
   return (
     <>
       <h1>Kanban Board</h1>
@@ -194,6 +202,7 @@ export default function KanbanBoard() {
                       taskItem={taskItem}
                       handleChnageStatus={handleChnageStatus}
                       handleDeleteTask={handleDeleteTask}
+                      handleEditTask={handleEditTask}
                     />
                   );
                 })}
