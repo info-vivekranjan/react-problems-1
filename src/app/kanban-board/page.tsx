@@ -2,6 +2,25 @@
 
 import React, { useState } from "react";
 import { KanbanDataType, STATUA_TYPES } from "./kanbanType";
+import TaskComp from "./TaskComp";
+
+const taskColumn = [
+  {
+    label: "Todo",
+    statusType: STATUA_TYPES.TODO,
+    color: "red",
+  },
+  {
+    label: "In Progress",
+    statusType: STATUA_TYPES.IN_PROGRESS,
+    color: "blue",
+  },
+  {
+    label: "Done",
+    statusType: STATUA_TYPES.DONE,
+    color: "green",
+  },
+];
 
 export default function KanbanBoard() {
   const [formInput, setFormInput] = useState({
@@ -89,6 +108,33 @@ export default function KanbanBoard() {
       </form>
       <hr />
       <h2>Tasks</h2>
+      <section
+        style={{
+          display: "flex",
+          gap: "20px",
+        }}
+      >
+        {taskColumn.map((column) => {
+          return (
+            <div
+              style={{
+                border: `2px solid ${column.color}`,
+                padding: "15px",
+                minWidth: "250px",
+              }}
+            >
+              <h3 style={{ color: column.color, marginTop: "0" }}>
+                {column.label}
+              </h3>
+              {task
+                .filter((item) => item.status === column.statusType)
+                .map((taskItem) => {
+                  return <TaskComp key={taskItem.id} taskItem={taskItem} />;
+                })}
+            </div>
+          );
+        })}
+      </section>
     </>
   );
 }
