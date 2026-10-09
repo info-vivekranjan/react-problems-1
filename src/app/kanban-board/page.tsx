@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { KanbanDataType, STATUA_TYPES, TASK_DIRECTION } from "./kanbanType";
 import TaskComp from "./TaskComp";
 
@@ -27,7 +27,23 @@ export default function KanbanBoard() {
     title: "",
     date: "",
   });
-  const [task, setTask] = useState<KanbanDataType[]>([]);
+  const [task, setTask] = useState<KanbanDataType[]>(() => {
+    if (typeof window === "undefined") {
+      return [];
+    }
+
+    let tasks = localStorage.getItem("task");
+
+    if (!tasks) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(tasks);
+    } catch (err) {
+      throw new Error("Error while parsing the task");
+    }
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -120,6 +136,10 @@ export default function KanbanBoard() {
       });
     });
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("task", JSON.stringify(task));
+  }, [task]);
 
   return (
     <>
