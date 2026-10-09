@@ -3,6 +3,7 @@ import { KanbanDataType, STATUA_TYPES, TASK_DIRECTION } from "./kanbanType";
 export default function TaskComp({
   taskItem,
   handleChnageStatus,
+  handleDeleteTask,
 }: {
   taskItem: KanbanDataType;
   handleChnageStatus: (
@@ -10,6 +11,7 @@ export default function TaskComp({
     status: STATUA_TYPES,
     direction: TASK_DIRECTION,
   ) => void;
+  handleDeleteTask: (id: number) => void;
 }) {
   return (
     <section
@@ -35,7 +37,9 @@ export default function TaskComp({
           <button title="Edit" style={{ marginRight: "5px" }}>
             ✏️
           </button>
-          <button title="Delete">❌</button>
+          <button title="Delete" onClick={() => handleDeleteTask(taskItem.id)}>
+            ❌
+          </button>
         </div>
       </div>
 

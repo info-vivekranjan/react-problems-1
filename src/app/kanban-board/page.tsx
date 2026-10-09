@@ -105,6 +105,14 @@ export default function KanbanBoard() {
     [],
   );
 
+  const handleDeleteTask = useCallback((id: number) => {
+    setTask((prev) => {
+      return prev.filter((item) => {
+        return item.id !== id;
+      });
+    });
+  }, []);
+
   return (
     <>
       <h1>Kanban Board</h1>
@@ -185,6 +193,7 @@ export default function KanbanBoard() {
                       key={taskItem.id}
                       taskItem={taskItem}
                       handleChnageStatus={handleChnageStatus}
+                      handleDeleteTask={handleDeleteTask}
                     />
                   );
                 })}
