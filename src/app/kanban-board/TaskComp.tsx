@@ -1,12 +1,23 @@
-import { KanbanDataType } from "./kanbanType";
+import { KanbanDataType, STATUA_TYPES, TASK_DIRECTION } from "./kanbanType";
 
-export default function TaskComp({ taskItem }: { taskItem: KanbanDataType }) {
+export default function TaskComp({
+  taskItem,
+  handleChnageStatus,
+}: {
+  taskItem: KanbanDataType;
+  handleChnageStatus: (
+    id: number,
+    status: STATUA_TYPES,
+    direction: TASK_DIRECTION,
+  ) => void;
+}) {
   return (
     <section
       style={{
         border: "1px solid orange",
         borderRadius: "4px",
         padding: "10px",
+        marginBottom: "10px",
       }}
     >
       <div
@@ -21,15 +32,46 @@ export default function TaskComp({ taskItem }: { taskItem: KanbanDataType }) {
           <p>Date: {taskItem.date}</p>
         </div>
         <div>
-          <button>E</button>
-          <button>D</button>
+          <button title="Edit" style={{ marginRight: "5px" }}>
+            ✏️
+          </button>
+          <button title="Delete">❌</button>
         </div>
       </div>
 
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <button>{"<"}</button>
+        {taskItem.status !== STATUA_TYPES.TODO && (
+          <span
+            style={{ fontSize: "20px", cursor: "pointer" }}
+            role="button"
+            onClick={() =>
+              handleChnageStatus(
+                taskItem.id,
+                taskItem.status,
+                TASK_DIRECTION.BACKWARD,
+              )
+            }
+          >
+            ⬅️
+          </span>
+        )}
         <div></div>
-        <button>{">"}</button>
+
+        {taskItem.status !== STATUA_TYPES.DONE && (
+          <span
+            style={{ fontSize: "20px", cursor: "pointer" }}
+            role="button"
+            onClick={() =>
+              handleChnageStatus(
+                taskItem.id,
+                taskItem.status,
+                TASK_DIRECTION.FORWARD,
+              )
+            }
+          >
+            ➡️
+          </span>
+        )}
       </div>
     </section>
   );

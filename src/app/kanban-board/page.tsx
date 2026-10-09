@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { KanbanDataType, STATUA_TYPES } from "./kanbanType";
+import React, { useCallback, useState } from "react";
+import { KanbanDataType, STATUA_TYPES, TASK_DIRECTION } from "./kanbanType";
 import TaskComp from "./TaskComp";
 
 const taskColumn = [
@@ -44,6 +44,11 @@ export default function KanbanBoard() {
     e.preventDefault();
     console.log("Submitting...");
 
+    if (formInput.title.trim() === "" || formInput.date.trim() === "") {
+      alert("Both fields are required");
+      return;
+    }
+
     const payload: KanbanDataType = {
       id: Date.now(),
       title: formInput.title,
@@ -56,6 +61,49 @@ export default function KanbanBoard() {
   };
 
   console.log(task);
+
+  const handleChnageStatus = useCallback(
+    (id: number, status: STATUA_TYPES, direction: TASK_DIRECTION) => {
+      if (direction === TASK_DIRECTION.FORWARD) {
+        if (status === STATUA_TYPES.TODO) {
+          setTask((prev) => {
+            return prev.map((item) => {
+              return item.id === id
+                ? { ...item, status: STATUA_TYPES.IN_PROGRESS }
+                : item;
+            });
+          });
+        } else if (status === STATUA_TYPES.IN_PROGRESS) {
+          setTask((prev) => {
+            return prev.map((item) => {
+              return item.id === id
+                ? { ...item, status: STATUA_TYPES.DONE }
+                : item;
+            });
+          });
+        }
+      } else if (direction === TASK_DIRECTION.BACKWARD) {
+        if (status === STATUA_TYPES.DONE) {
+          setTask((prev) => {
+            return prev.map((item) => {
+              return item.id === id
+                ? { ...item, status: STATUA_TYPES.IN_PROGRESS }
+                : item;
+            });
+          });
+        } else if (status === STATUA_TYPES.IN_PROGRESS) {
+          setTask((prev) => {
+            return prev.map((item) => {
+              return item.id === id
+                ? { ...item, status: STATUA_TYPES.TODO }
+                : item;
+            });
+          });
+        }
+      }
+    },
+    [],
+  );
 
   return (
     <>
@@ -70,6 +118,7 @@ export default function KanbanBoard() {
             type="text"
             name="title"
             id="title"
+            placeholder="Task 1"
             value={formInput.title}
             onChange={handleChange}
             style={{ padding: "10px", width: "300px", fontSize: "25px" }}
@@ -102,6 +151,8 @@ export default function KanbanBoard() {
               width: "150px",
               border: "1px solid black",
               cursor: "pointer",
+              backgroundColor: "orange",
+              fontSize: "18px",
             }}
           />
         </div>
@@ -129,7 +180,13 @@ export default function KanbanBoard() {
               {task
                 .filter((item) => item.status === column.statusType)
                 .map((taskItem) => {
-                  return <TaskComp key={taskItem.id} taskItem={taskItem} />;
+                  return (
+                    <TaskComp
+                      key={taskItem.id}
+                      taskItem={taskItem}
+                      handleChnageStatus={handleChnageStatus}
+                    />
+                  );
                 })}
             </div>
           );

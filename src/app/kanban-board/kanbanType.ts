@@ -1,7 +1,12 @@
 export enum STATUA_TYPES {
-  TODO = "TODO",
-  IN_PROGRESS = "IN_PROGRESS",
-  DONE = "DONE",
+  TODO = "todo",
+  IN_PROGRESS = "in_progress",
+  DONE = "done",
+}
+
+export enum TASK_DIRECTION {
+  FORWARD = "forward",
+  BACKWARD = "backward",
 }
 
 export interface KanbanDataType {
