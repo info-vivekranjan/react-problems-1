@@ -2,6 +2,8 @@
 
 import { usersData } from "@/constants/usersData";
 import { useEffect, useState } from "react";
+import UserTable from "./UserTable";
+import { UserDataType } from "./userType";
 
 const useDebounceSearch = (query: string, delay = 500) => {
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -25,7 +27,7 @@ export default function UsersTablePage() {
   const limit = 2;
   const startIndex = (page - 1) * limit;
 
-  const getFiltedredUsersData = () => {
+  const getFiltedredUsersData = (): UserDataType[] => {
     const data = usersData
       .filter((user) => {
         return (
@@ -114,44 +116,7 @@ export default function UsersTablePage() {
       </div>
 
       <br />
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>NAME</th>
-            <th>AGE</th>
-            <th>CITY</th>
-            <th>EXPERIENCE</th>
-            <th>ROLE</th>
-            <th>SALARY</th>
-            <th>SKILLS</th>
-            <th>ACTIVE</th>
-          </tr>
-        </thead>
-        <tbody>
-          {getFiltedredUsersData().map((user) => {
-            return (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>{user.age}</td>
-                <td>{user.city}</td>
-                <td>{`${user.experience} Years`}</td>
-                <td>{user.role}</td>
-                <td>{user.salary}</td>
-                <td>{user.skills.map((skill) => skill + " ")}</td>
-                <td>
-                  {user.isActive ? (
-                    <span style={{ color: "green" }}>Active</span>
-                  ) : (
-                    <span style={{ color: "red" }}>Inactive</span>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <UserTable getFiltedredUsersData={getFiltedredUsersData} />
       <section
         style={{
           display: "flex",
