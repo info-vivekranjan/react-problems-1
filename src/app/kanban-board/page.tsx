@@ -127,6 +127,20 @@ export default function KanbanBoard() {
     });
   }, []);
 
+  const handleTaskFilterSort = (column: { statusType: STATUA_TYPES }) => {
+    return task
+      .filter((item) => item.status === column.statusType)
+      .filter((item) =>
+        item.title
+          .trim()
+          .toLowerCase()
+          .includes(debouncedSearch.trim().toLowerCase()),
+      )
+      .sort((a, b) => b.date.localeCompare(a.date));
+  };
+
+  console.log(task);
+
   useEffect(() => {
     localStorage.setItem("task", JSON.stringify(task));
   }, [task]);
@@ -212,25 +226,17 @@ export default function KanbanBoard() {
               <h3 style={{ color: column.color, marginTop: "0" }}>
                 {column.label}
               </h3>
-              {task
-                .filter((item) => item.status === column.statusType)
-                .filter((item) =>
-                  item.title
-                    .trim()
-                    .toLowerCase()
-                    .includes(debouncedSearch.trim().toLowerCase()),
-                )
-                .map((taskItem) => {
-                  return (
-                    <TaskComp
-                      key={taskItem.id}
-                      taskItem={taskItem}
-                      handleChnageStatus={handleChnageStatus}
-                      handleDeleteTask={handleDeleteTask}
-                      handleEditTask={handleEditTask}
-                    />
-                  );
-                })}
+              {handleTaskFilterSort(column).map((taskItem) => {
+                return (
+                  <TaskComp
+                    key={taskItem.id}
+                    taskItem={taskItem}
+                    handleChnageStatus={handleChnageStatus}
+                    handleDeleteTask={handleDeleteTask}
+                    handleEditTask={handleEditTask}
+                  />
+                );
+              })}
             </div>
           );
         })}
