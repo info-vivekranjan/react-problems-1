@@ -8,6 +8,7 @@ import {
   taskColumn,
 } from "./kanbanType";
 import TaskComp from "./TaskComp";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function KanbanBoard() {
   const [formInput, setFormInput] = useState({
@@ -31,6 +32,8 @@ export default function KanbanBoard() {
       throw new Error("Error while parsing the task");
     }
   });
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -182,6 +185,15 @@ export default function KanbanBoard() {
       </form>
       <hr />
       <h2>Tasks</h2>
+      <input
+        type="text"
+        placeholder="Search..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        style={{ padding: "10px" }}
+      />
+      <br />
+      <br />
       <section
         style={{
           display: "flex",
@@ -202,6 +214,12 @@ export default function KanbanBoard() {
               </h3>
               {task
                 .filter((item) => item.status === column.statusType)
+                .filter((item) =>
+                  item.title
+                    .trim()
+                    .toLowerCase()
+                    .includes(debouncedSearch.trim().toLowerCase()),
+                )
                 .map((taskItem) => {
                   return (
                     <TaskComp
