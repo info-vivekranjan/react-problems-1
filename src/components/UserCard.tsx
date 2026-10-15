@@ -1,6 +1,6 @@
 "use client";
 
-import { User } from "@/app/h-scroll/HscrollType";
+import { User } from "@/app/1/h-scroll/HscrollType";
 
 export default function UserCard({ user }: { user: User }) {
   return (
