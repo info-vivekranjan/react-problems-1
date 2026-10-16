@@ -1,6 +1,6 @@
 "use client";
 
-import ModalComp from "@/components/ModalComp";
+import ModalComp from "@/components/1/ModalComp";
 import { useState } from "react";
 
 export default function ModalPage() {

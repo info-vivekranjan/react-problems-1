@@ -1,6 +1,6 @@
 "use client";
 
-import UserCard from "@/components/UserCard";
+import UserCard from "@/components/1/UserCard";
 import { useEffect, useRef, useState } from "react";
 import { User } from "../h-scroll/HscrollType";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import UserCard from "@/components/UserCard";
+import UserCard from "@/components/1/UserCard";
 import { User } from "./HscrollType";
 
 export default function Hscroll() {
