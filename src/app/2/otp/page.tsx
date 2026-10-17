@@ -28,7 +28,7 @@ export default function OTP() {
     }
   };
 
-  const handleRemoveOtp = (
+  const handleChangeDelete = (
     e: React.KeyboardEvent<HTMLInputElement>,
     index: number,
   ) => {
@@ -38,9 +38,11 @@ export default function OTP() {
 
     if (index > 0) {
       e.preventDefault();
+
       const newOtp = [...otp];
 
       newOtp[index - 1] = "";
+
       setOtp(newOtp);
 
       otpRef.current[index - 1]?.focus();
@@ -48,24 +50,27 @@ export default function OTP() {
   };
 
   const handlePaste = (e: React.ClipboardEvent) => {
-    const pastedOtp = e.clipboardData.getData("text");
-    console.log("pastedOtp===", pastedOtp);
+    const pastedText = e.clipboardData.getData("text");
 
-    if (pastedOtp.length > OTP_LENGTH) {
+    console.log("pastedText===", pastedText);
+
+    if (pastedText.trim().length > OTP_LENGTH) {
       return;
     }
 
-    setOtp(pastedOtp.split(""));
+    setOtp(pastedText.split(""));
   };
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    if (otp.join("").length !== OTP_LENGTH) {
-      return;
-    }
+    const payload = {
+      otp: otp.join(""),
+    };
 
-    console.log("otp==", otp.join(""));
+    setOtp(Array(OTP_LENGTH).fill(""));
+
+    console.log(payload);
   };
 
   console.log(otp);
@@ -74,33 +79,37 @@ export default function OTP() {
     <>
       <h1>OTP</h1>
       <form onSubmit={handleSubmit}>
-        {otp.map((item, index) => {
+        {otp?.map((item, index) => {
           return (
             <input
-              key={index}
               maxLength={1}
               type="text"
               value={item}
               id={item + index}
               onChange={(e) => handleChangeOtp(e, index)}
-              onKeyDown={(e) => handleRemoveOtp(e, index)}
-              onPaste={handlePaste}
+              onKeyDown={(e) => handleChangeDelete(e, index)}
+              onPaste={(e) => handlePaste(e)}
+              placeholder={String(index)}
               ref={(ele) => {
                 otpRef.current[index] = ele;
               }}
               style={{
-                padding: "10px",
-                width: "35px",
-                height: "35px",
+                padding: "15px",
                 fontSize: "25px",
                 textAlign: "center",
-                margin: "10px",
+                height: "35px",
+                width: "35px",
+                margin: "15px",
               }}
             />
           );
         })}
         <br />
-        <input type="submit" value="Submit" style={{ margin: "10px" }} />
+        <input
+          type="submit"
+          value="Submit"
+          style={{ padding: "10px", margin: "15px" }}
+        />
       </form>
     </>
   );
