@@ -24,6 +24,10 @@ export default function AutoComplete() {
     setSearch(e.target.value);
   };
 
+  const handleSelectOption = (query: string) => {
+    setSearch(query);
+  };
+
   useEffect(() => {
     if (debouncedSearch.trim() === "") {
       setData([]);
@@ -73,7 +77,19 @@ export default function AutoComplete() {
               }}
             >
               {data.map((item) => {
-                return <div style={{ margin: "10px" }}>{item.name}</div>;
+                return (
+                  <div
+                    style={{
+                      margin: "10px",
+                      cursor: "pointer",
+                      border: "1px solid black",
+                      padding: "5px",
+                    }}
+                    onClick={() => handleSelectOption(item.name)}
+                  >
+                    {item.name}
+                  </div>
+                );
               })}
             </div>
           )}
