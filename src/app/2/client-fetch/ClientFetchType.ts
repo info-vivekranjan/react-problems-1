@@ -8,3 +8,10 @@ export interface ClientFetchUserDataType {
   phone: string;
   image: string;
 }
+
+export interface ClientFetchUserApiType<T> {
+  total: number;
+  skip: number;
+  limit: number;
+  users: T[];
+}
