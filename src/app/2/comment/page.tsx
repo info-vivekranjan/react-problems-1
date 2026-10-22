@@ -88,6 +88,38 @@ export default function Comment() {
 
   console.log(commentData);
 
+  // EDIT REPLY
+
+  const handleEditReply = (
+    comments: CommentDataType[],
+    parentId: number,
+    payload: { message: string; date: string },
+  ): CommentDataType[] => {
+    return comments.map((comment) => {
+      if (comment.id === parentId) {
+        return {
+          ...comment,
+          ...payload,
+        };
+      }
+
+      return {
+        ...comment,
+        replies: handleEditReply(comment.replies, parentId, payload),
+      };
+    });
+  };
+
+  const onEditReply = (message: string, parentId: number) => {
+    console.log(message, parentId);
+
+    const payload = {
+      message: message,
+      date: new Date().toString(),
+    };
+    setCommentData((prev) => handleEditReply(prev, parentId, payload));
+  };
+
   return (
     <>
       <h1>Comment Reply</h1>
@@ -109,6 +141,7 @@ export default function Comment() {
             comment={comment}
             onAddReply={onAddReply}
             onDeleteReply={onDeleteReply}
+            onEditReply={onEditReply}
           />
         );
       })}

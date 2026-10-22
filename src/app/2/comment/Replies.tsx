@@ -7,17 +7,26 @@ export default function Replies({
   comment,
   onAddReply,
   onDeleteReply,
+  onEditReply,
 }: {
   comment: CommentDataType;
   onAddReply: (message: string, parentId: number) => void;
   onDeleteReply: (parentId: number) => void;
+  onEditReply: (message: string, parentId: number) => void;
 }) {
   const [replyInput, setReplyInput] = useState("");
   const [showReplyInput, setShowReplyInput] = useState(false);
+  const [replyEditInput, setReplyEditInput] = useState(comment.message);
+  const [showReplyEditInput, setShowReplyEditInput] = useState(false);
 
   const handleChangeReply = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setReplyInput(value);
+  };
+
+  const handleChangeEditReply = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setReplyEditInput(value);
   };
 
   const handleAddReply = () => {
@@ -34,11 +43,36 @@ export default function Replies({
     onDeleteReply(comment.id);
   };
 
+  const handleEditReply = () => {
+    if (replyEditInput.trim() === "") {
+      return;
+    }
+    onEditReply(replyEditInput, comment.id);
+    setShowReplyEditInput(false);
+  };
+
   return (
     <section style={{ marginTop: "15px" }}>
-      <span>{comment.message}</span>
+      {showReplyEditInput ? (
+        <>
+          <input
+            type="text"
+            placeholder="Edit reply"
+            name="edit-reply"
+            id="edit-reply"
+            value={replyEditInput}
+            onChange={handleChangeEditReply}
+          />
+          <button onClick={handleEditReply}>Save</button>
+        </>
+      ) : (
+        <span>{comment.message}</span>
+      )}
       <button onClick={() => setShowReplyInput(true)}>Reply</button>
       <button onClick={handleDelete}>Delete</button>
+      {!showReplyEditInput && (
+        <button onClick={() => setShowReplyEditInput(true)}>Edit</button>
+      )}
 
       {showReplyInput && (
         <div>
@@ -61,6 +95,7 @@ export default function Replies({
               comment={item}
               onAddReply={onAddReply}
               onDeleteReply={onDeleteReply}
+              onEditReply={onEditReply}
             />
           );
         })}
