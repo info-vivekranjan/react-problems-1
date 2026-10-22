@@ -64,6 +64,28 @@ export default function Comment() {
     setCommentData((prev) => handleAddReply(prev, parentId, payload));
   };
 
+  // DELETE REPLY
+
+  const handleDeleteReply = (
+    comments: CommentDataType[],
+    parentId: number,
+  ): CommentDataType[] => {
+    return comments
+      .filter((item) => item.id !== parentId)
+      .map((comment) => {
+        return {
+          ...comment,
+          replies: handleDeleteReply(comment.replies, parentId),
+        };
+      });
+  };
+
+  const onDeleteReply = (parentId: number) => {
+    console.log(parentId);
+
+    setCommentData((prev) => handleDeleteReply(prev, parentId));
+  };
+
   console.log(commentData);
 
   return (
@@ -82,7 +104,12 @@ export default function Comment() {
       </div>
       {commentData?.map((comment) => {
         return (
-          <Replies key={comment.id} comment={comment} onAddReply={onAddReply} />
+          <Replies
+            key={comment.id}
+            comment={comment}
+            onAddReply={onAddReply}
+            onDeleteReply={onDeleteReply}
+          />
         );
       })}
     </>
