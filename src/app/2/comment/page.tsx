@@ -1,12 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CommentDataType } from "./CommentReplyType";
 import Replies from "./Replies";
 
 export default function Comment() {
   const [commentInput, setCommentInput] = useState("");
-  const [commentData, setCommentData] = useState<CommentDataType[]>([]);
+  const [commentData, setCommentData] = useState<CommentDataType[]>(() => {
+    if (typeof window === "undefined") {
+      return [];
+    }
+    const comments = localStorage.getItem("commentData");
+
+    if (!comments) {
+      return [];
+    }
+
+    try {
+      const parsedComment = JSON.parse(comments);
+      return parsedComment ?? [];
+    } catch (error) {
+      throw new Error("Error: while parsing");
+    }
+  });
 
   const handleChangeComment = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -119,6 +135,10 @@ export default function Comment() {
     };
     setCommentData((prev) => handleEditReply(prev, parentId, payload));
   };
+
+  useEffect(() => {
+    localStorage.setItem("commentData", JSON.stringify(commentData));
+  }, [commentData]);
 
   return (
     <>
